@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ant-project" default="run" basedir="../">
+	<!-- 这里的basedir是 工程的目录为根目录
+		一般basedir="."表示的是build.xml文件所在的相对目录为根目录即src 
+	-->
+	<property name="src" value="src"/>
+	<property name="dest" value="/${basedir}/WebRoot/WEB-INF/classes"/>
+	
+	<property name="webApp" value="E:\apache-tomcat-5.5.26\webapps\ant-project"/>
+	<echo message="init ..." />
+	<!-- ================================= 
+          target: init              
+         ================================= -->
+    <target name="init">    
+        <mkdir dir="${dest}"/> 
+    	<delete dir="${src}/classes"></delete>
+    </target>	
+	<!-- ================================= 
+	          target: run              
+	         ================================= -->
+	<!-- 编译class文件-->
+	<target name="compile" depends="init">
+	<!--	<javac srcdir="${src}" destdir="/${basedir}/WebRoot/WEB-INF/classes"></javac> -->
+	</target>	
+	
+    <target name="run" depends="compile" description="description">
+    	<!--除了class文件外，其他文件拷贝到tomcat目录下-->
+        <copy todir="${webApp}" overwrite="true">
+            <fileset dir="${basedir}/WebRoot" excludes="**/*.class"/>
+        </copy>
+    	<!--将class文件打包，放到/WEB-INF/lib目录下-->
+        <jar destfile="${webApp}/WEB-INF/lib/test.jar">
+            <fileset dir="/${basedir}/WebRoot/WEB-INF/classes">
+                <include name="**/*.class" />
+            </fileset>
+        </jar>
+		
+    </target>
+
+
+</project>
